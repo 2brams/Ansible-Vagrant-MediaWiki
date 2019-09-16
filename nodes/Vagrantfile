@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  servers=[
+    {
+      :hostname => "mediaWiki-serveur-1",
+      :box => "geerlingguy/centos7",
+      :ip => "192.168.122.11"
+    },
+    {
+      :hostname => "mediaWiki-serveur-2",
+      :box => "geerlingguy/centos7",
+      :ip => "192.168.122.12"
+    }
+
+  ]
+
+  servers.each do |machine|
+
+    config.vm.define machine[:hostname] do |node|
+      node.vm.box = machine[:box]
+      node.vm.hostname = machine[:hostname]
+    
+      node.vm.network :private_network, ip: machine[:ip]
+
+      node.vm.provider :virtualbox do |vb|
+        vb.memory = "1024"
+        vb.name = machine[:hostname]
+      end
+
+    end
+
+  end
+
+end
